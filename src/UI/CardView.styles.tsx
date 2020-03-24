@@ -8,8 +8,10 @@ const paddingVW = 0.25
 
 const fudgeFactor = 0.99
 
+const width = 12.5 * fudgeFactor - paddingVW * 2
+
 export const CardAspectContainer = styled.div<{overflowCorrection: number}>`
-  width: ${aspectRatioVW(12.5 * fudgeFactor - paddingVW * 2)};
+  width: ${aspectRatioVW(width)};
   padding-top: ${aspectRatioVW(12.5 * fudgeFactor * cardAspectRatio - paddingVW * 2)};
   margin: ${aspectRatioVW(paddingVW)};
   position: relative;
@@ -30,4 +32,15 @@ export const CardInnerContainer = styled.div<{id: string, selected: boolean}>`
   border: ${ props => props.selected ? "3px solid red" : "1px solid black" };
   background-image: url(${ props => CardImages[props.id as keyof typeof CardImages] });
   background-size: cover
+`;
+
+export const CardMarker = styled.div<{location: [number, number]}>`
+  position: absolute;
+  top: ${ props => aspectRatioVW(width * cardAspectRatio * props.location[1] - width * 0.15 / 2)};
+  left: ${ props => aspectRatioVW(width * props.location[0] - width * 0.15 / 2)};
+  width: ${aspectRatioVW(width * 0.15)};
+  height: ${aspectRatioVW(width * 0.15)};
+  background-color: darkgray;
+  border: 3px solid black;
+  border-radius: ${aspectRatioVW(width * 0.15)};
 `;

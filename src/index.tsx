@@ -9,17 +9,21 @@ const container = new Container()
 
 ;(window as any).container = container
 
-container.cardStackManager.moveCard(new Card("beacon-of-light"), Stack.HAND)
-container.cardStackManager.moveCard(new Card("cleansing-force"), Stack.HAND)
-container.cardStackManager.moveCard(new Card("defensive-stance"), Stack.HAND)
-container.cardStackManager.moveCard(new Card("illuminate-the-target"), Stack.HAND)
-container.cardStackManager.moveCard(new Card("mobilizing-axiom"), Stack.HAND)
-container.cardStackManager.moveCard(new Card("path-of-glory"), Stack.HAND)
-container.cardStackManager.moveCard(new Card("practical-plans"), Stack.HAND)
-container.cardStackManager.moveCard(new Card("purifying-aura"), Stack.HAND)
-container.cardStackManager.moveCard(new Card("tactical-order"), Stack.HAND)
-container.cardStackManager.moveCard(new Card("unwavering-mandate"), Stack.HAND)
-container.cardStackManager.moveCard(new Card("weapon-of-purity"), Stack.HAND)
+
+require("gloomhaven/data/character-ability-cards")
+
+
+container.deckManager.selectedCards.push(new Card("beacon-of-light"))
+container.deckManager.selectedCards.push(new Card("cleansing-force"))
+container.deckManager.selectedCards.push(new Card("defensive-stance"))
+container.deckManager.selectedCards.push(new Card("illuminate-the-target"))
+container.deckManager.selectedCards.push(new Card("mobilizing-axiom"))
+container.deckManager.selectedCards.push(new Card("path-of-glory"))
+container.deckManager.selectedCards.push(new Card("practical-plans"))
+container.deckManager.selectedCards.push(new Card("purifying-aura"))
+container.deckManager.selectedCards.push(new Card("tactical-order"))
+container.deckManager.selectedCards.push(new Card("unwavering-mandate"))
+container.deckManager.selectedCards.push(new Card("weapon-of-purity"))
 
 ReactDOM.render(<AppView container={container} />, document.getElementById('root'));
 
