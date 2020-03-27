@@ -6,6 +6,8 @@ import { App } from './AppView.styles';
 import { DndProvider } from 'react-dnd';
 import DndBackend from 'react-dnd-html5-backend'
 import { PlayingView } from './PlayingView';
+import { ChooseDeckView } from './ChooseDeckView';
+import { SetupState } from '../Logic/SetupStateUIManager';
 
 interface Props {container: Container}
 
@@ -20,7 +22,11 @@ export class AppView extends React.Component<Props> {
         return (
             <App>
               <DndProvider backend={DndBackend}>
-                <PlayingView container={this.props.container} />                  
+                { 
+                  this.props.container.setupStateUIManager.setupState == SetupState.CHOOSE_DECK ?
+                  <ChooseDeckView container={this.props.container} /> :
+                  <PlayingView container={this.props.container} />   
+                }
               </DndProvider>
             </App>
         );

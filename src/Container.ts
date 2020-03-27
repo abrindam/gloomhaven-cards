@@ -1,16 +1,19 @@
-import { CardStackManager } from "./Logic/CardStackManager";
+import { PlayingManager } from "./Logic/PlayingManager";
 import { SelectedCardUIManager } from "./Logic/SelectedCardUIManager";
 import { DeckManager } from "./Logic/DeckManager";
+import { SetupStateUIManager } from "./Logic/SetupStateUIManager";
 
 export class Container {
 
   deckManager: DeckManager
-  cardStackManager: CardStackManager
+  playingManager: PlayingManager
   selectedCardUIManager: SelectedCardUIManager
+  setupStateUIManager: SetupStateUIManager;
 
   constructor() {
     this.deckManager = new DeckManager()
-    this.cardStackManager = new CardStackManager(this.deckManager)
+    this.playingManager = new PlayingManager(this.deckManager)
+    this.setupStateUIManager = new SetupStateUIManager()
     this.selectedCardUIManager = new SelectedCardUIManager()
   }
 }

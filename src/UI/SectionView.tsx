@@ -1,21 +1,20 @@
 import * as React from 'react';
 import { observer } from "mobx-react";
-import { Container } from '../Container';
 
-import { SectionTitle, Section } from './SectionView.styles';
+import { SectionTitle, Section, CardRow } from './SectionView.styles';
 import { CardView } from './CardView';
-import { Stack } from '../Logic/CardStackManager';
+import { Stack } from '../Logic/PlayingManager';
 import { DropTarget, DropTargetSpec, DragElementWrapper } from 'react-dnd';
 import { DragTypes } from './DragTypes';
 import { Card } from '../Logic/Card';
 
 
-const stackNames = {
-  [Stack.HAND]: "Hand",
-  [Stack.IN_PLAY]: "In Play",
-  [Stack.ACTIVE]: "Active",
-  [Stack.DISCARD]: "Discard",
-  [Stack.LOST]: "Lost",
+export interface SectionViewDelegate {
+  getCards(): Card[]
+  canDropCard(card: Card): boolean
+  onDropCard(card: Card): void
+  isSelected(card: Card): boolean
+  onSelected(card: Card): void
 }
 
 interface DropProps {
@@ -25,12 +24,10 @@ interface DropProps {
 }
 
 interface Props extends DropProps {
-  container: Container
-  stack: Stack
+  name: string
+  delegate: SectionViewDelegate
   horizontalCards: number, 
   verticalCards: number
-  topPercent: number,
-  leftPercent: number
 }
 
 @observer
@@ -41,40 +38,61 @@ class SectionView extends React.Component<Props> {
     }
 
     render() {
-      const cardsInStack = this.props.container.cardStackManager.getCardsForStack(this.props.stack)
-      const idealCards = this.props.horizontalCards * this.props.verticalCards
-      const overflowCards = Math.max(0, cardsInStack.length - idealCards)
-      const overflowCorrection = overflowCards / (overflowCards + 1)
+  
+      const cardsInStack = this.props.delegate.getCards()
+      const idealCardsPerRow = this.props.horizontalCards
+      const actualMinCardsPerRow = Math.floor(cardsInStack.length / this.props.verticalCards)
+      const actualMaxCardsPerRow = Math.ceil(cardsInStack.length / this.props.verticalCards)
+      const numberOfMaxRows = cardsInStack.length % this.props.verticalCards
+      // I had to do ALGEBRA to figure this out!
+      const overflowCorrection = Math.max(actualMaxCardsPerRow - idealCardsPerRow, 0) / (actualMaxCardsPerRow - 1)
       console.log(overflowCorrection)
+
+      // Array of numbers, each entry is number of cards in a given row
+      const rowLengths = Array(numberOfMaxRows).fill(actualMaxCardsPerRow).concat(Array(this.props.verticalCards - numberOfMaxRows).fill(actualMinCardsPerRow))
+      let unrenderedCardsInStack = cardsInStack.slice()
+      const rowCards = rowLengths.map((numCardsInRow) => {
+        return unrenderedCardsInStack.splice(0, numCardsInRow)
+      })
+
+
       return (
         <Section 
           ref={this.props.dropRef} 
           showValidDrop = {this.props.canDrop } 
           showValidDropHover = {this.props.canDrop && this.props.isOver} 
-          {...this.props}
+          horizontalCards = {this.props.horizontalCards}
+          verticalCards = {this.props.verticalCards}
         >
-          <SectionTitle>{stackNames[this.props.stack]}</SectionTitle>
-            { 
-              cardsInStack.map((card) => {
-                let selectedId = this.props.container.selectedCardUIManager.selectedCard && this.props.container.selectedCardUIManager.selectedCard.id
-                return (
-                  <CardView 
-                    key={card.id}
-                    card={card} 
-                    selected={ selectedId == card.id}
-                    onClick = {()=> { this.cardSelected(card) }}
-                    overflowCorrection = {overflowCorrection} 
-                  />
-                )
-                  
-              }) 
-            }
+          <SectionTitle>{this.props.name}</SectionTitle>
+          {
+            rowCards.map((cardsInRow) => {              
+              return (
+                <CardRow>
+                  { 
+                    cardsInRow.map((card) => {
+                      return (
+                        <CardView 
+                          key={card.id}
+                          card={card} 
+                          selected={ this.props.delegate.isSelected(card) }
+                          onClick = {()=> { this.cardSelected(card) }}
+                          overflowCorrection = {overflowCorrection} 
+                        />
+                      )
+                        
+                    }) 
+                  }
+                </CardRow>
+              )
+            })
+          }
         </Section>
       )
     }
  
     private cardSelected(card: Card) {
-      this.props.container.selectedCardUIManager.selectCard(card)
+      this.props.delegate.onSelected(card)
     }
       
 };
@@ -82,16 +100,15 @@ class SectionView extends React.Component<Props> {
 const dragSpec: DropTargetSpec<Props> = {
   drop: (props, monitor, component) => {
     if (monitor.getItemType() == DragTypes.CARD) {
-      const cardToMove = monitor.getItem().card as Card
-      props.container.cardStackManager.moveCard(cardToMove, props.stack)
+      const droppedCard = monitor.getItem().card as Card
+      props.delegate.onDropCard(droppedCard)
     }
   },
 
   canDrop: (props, monitor) => {
     if (monitor.getItemType() == DragTypes.CARD) {
-      const cardToMove = monitor.getItem().card as Card
-      const cardStack = props.container.cardStackManager.getStackForCard(cardToMove)
-      return cardStack != props.stack
+      const hoveredCard = monitor.getItem().card as Card
+      return props.delegate.canDropCard(hoveredCard)
     }
     return false
   }

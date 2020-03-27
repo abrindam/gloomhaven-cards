@@ -6,7 +6,7 @@ const sectionTitleVerticalMarginVH = 0.5
 
 const fudgeFactor = 1 //0.91
 
-export const Section = styled.div<{horizontalCards: number, verticalCards: number, topPercent: number, leftPercent: number, showValidDrop: boolean, showValidDropHover: boolean}>`
+export const Section = styled.div<{horizontalCards: number, verticalCards: number, showValidDrop: boolean, showValidDropHover: boolean}>`
   border-bottom: 1px solid gray;
   border-right: 1px solid gray;
   box-sizing: border-box;
@@ -24,4 +24,7 @@ export const SectionTitle = styled.div`
   height: ${aspectRatioVH(sectionTitleHeightVH)};
   margin-top: ${aspectRatioVH(sectionTitleVerticalMarginVH)};
   margin-bottom: ${aspectRatioVH(sectionTitleVerticalMarginVH)};
+`;
+
+export const CardRow = styled.div`
 `;

@@ -11,7 +11,7 @@ export enum Stack {
   HAND, IN_PLAY, ACTIVE, DISCARD, LOST
 }
 
-export class CardStackManager {
+export class PlayingManager {
 
   private deckManager: DeckManager
 

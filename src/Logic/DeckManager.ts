@@ -1,14 +1,11 @@
 import { Card } from "./Card";
 import { computed, action, observable } from "mobx";
-import { CardStackManager } from "./CardStackManager";
 
 export class DeckManager {
 
-  private cardStackManager: CardStackManager
-
   @observable
   unselectedCards: Card[] = []
-  
+
   @observable
   selectedCards: Card[] = []
   
