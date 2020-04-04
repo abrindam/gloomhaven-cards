@@ -1,5 +1,6 @@
 var path = require('path');
 var webpack = require('webpack');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
   devtool: 'eval-source-map',
@@ -9,7 +10,6 @@ module.exports = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: '/static/'
   },
   resolve: {
     extensions: ['.js', '.ts', '.tsx']
@@ -37,7 +37,10 @@ module.exports = {
     hot: true
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new CopyPlugin([
+      { from: path.join(__dirname, 'index.html'), to: 'index.html' },
+    ]),
   ],
   performance: { hints: false }
 };

@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Virtual card management for Gloomhaven",
   "scripts": {
+    "build": "webpack",
     "start": "webpack-dev-server --mode=development"
   },
   "keywords": [
@@ -19,6 +20,7 @@
     "@types/react-dom": "^16.9.5",
     "@types/styled-components": "^5.0.1",
     "@types/webpack-env": "^1.15.1",
+    "copy-webpack-plugin": "^5.1.1",
     "file-loader": "^6.0.0",
     "ts-loader": "^6.2.1",
     "typescript": "^3.8.3",
