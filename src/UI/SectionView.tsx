@@ -46,7 +46,6 @@ class SectionView extends React.Component<Props> {
       const numberOfMaxRows = cardsInStack.length % this.props.verticalCards
       // I had to do ALGEBRA to figure this out!
       const overflowCorrection = Math.max(actualMaxCardsPerRow - idealCardsPerRow, 0) / (actualMaxCardsPerRow - 1)
-      console.log(overflowCorrection)
 
       // Array of numbers, each entry is number of cards in a given row
       const rowLengths = Array(numberOfMaxRows).fill(actualMaxCardsPerRow).concat(Array(this.props.verticalCards - numberOfMaxRows).fill(actualMinCardsPerRow))
@@ -66,9 +65,9 @@ class SectionView extends React.Component<Props> {
         >
           <SectionTitle>{this.props.name}</SectionTitle>
           {
-            rowCards.map((cardsInRow) => {              
+            rowCards.map((cardsInRow, index) => {              
               return (
-                <CardRow>
+                <CardRow key={index}>
                   { 
                     cardsInRow.map((card) => {
                       return (

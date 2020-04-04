@@ -2,10 +2,11 @@ import * as React from 'react';
 import { observer } from "mobx-react";
 import { Container } from '../Container';
 
-import { Row } from './PlayingView.styles';
+import { Row, NonCardSection, NonCardSectionTitle, VerticalGroup, Controls } from './PlayingView.styles';
 import { Stack } from '../Logic/PlayingManager';
 import { SectionView, SectionViewDelegate } from './SectionView';
 import { Card } from '../Logic/Card';
+import { Button } from './CommonUI.styles';
 
 class PlayingViewSectionViewDelegate implements SectionViewDelegate {
   private container: Container;
@@ -42,6 +43,7 @@ export class PlayingView extends React.Component<Props> {
 
   constructor(props: Props) {
     super(props)
+    this.onClickChangeDeck = this.onClickChangeDeck.bind(this)
   }
 
   render() {
@@ -51,13 +53,13 @@ export class PlayingView extends React.Component<Props> {
           <SectionView
             name="In Play" 
             delegate={new PlayingViewSectionViewDelegate(this.props.container, Stack.IN_PLAY)}
-            horizontalCards={3} 
+            horizontalCards={2} 
             verticalCards={1}
           />
           <SectionView
             name="Active" 
             delegate={new PlayingViewSectionViewDelegate(this.props.container, Stack.ACTIVE)}
-            horizontalCards={1} 
+            horizontalCards={2} 
             verticalCards={1}
           />
           <SectionView
@@ -73,13 +75,30 @@ export class PlayingView extends React.Component<Props> {
             verticalCards={1}
           />
         </Row>
-        <SectionView
-          name="Hand" 
-          delegate={new PlayingViewSectionViewDelegate(this.props.container, Stack.HAND)}
-          horizontalCards={6} 
-          verticalCards={2}
-        />
+        <Row>
+          <SectionView
+            name="Hand" 
+            delegate={new PlayingViewSectionViewDelegate(this.props.container, Stack.HAND)}
+            horizontalCards={6} 
+            verticalCards={2}
+          />
+          <VerticalGroup horizontalCards={2} verticalCards={2}>
+          <NonCardSection 
+            horizontalCards={2} 
+            verticalCards={1}
+          >
+            <NonCardSectionTitle>Attack Deck</NonCardSectionTitle>
+          </NonCardSection>
+          <Controls>
+            <Button onClick={this.onClickChangeDeck}>Change Deck</Button>
+          </Controls>
+          </VerticalGroup>
+        </Row>
       </div>
     )
+  }
+
+  onClickChangeDeck() {
+    this.props.container.setupStateUIManager.changeDeck()
   }
 }

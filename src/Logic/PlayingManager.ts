@@ -1,6 +1,8 @@
 import { observable, action, autorun, reaction } from "mobx"
 import { Card } from "./Card"
 import { DeckManager } from "./DeckManager"
+import { setupPersistence } from "./Persistence"
+import { serializable, map, object, list } from "serializr"
 
 function removeFromArray<T>(array:T[], item: T) {
   const index = array.indexOf(item)
@@ -15,6 +17,7 @@ export class PlayingManager {
 
   private deckManager: DeckManager
 
+  @serializable(map(list(object(Card))))
   @observable
   private stackToCards: Map<Stack, Card[]> = new Map()
 
@@ -26,6 +29,20 @@ export class PlayingManager {
     Object.keys(Stack).forEach((stack: keyof typeof Stack) => {
       this.stackToCards.set(Stack[stack], [])
     })
+
+    setupPersistence(this, "game")
+
+    
+    this.stackToCards.forEach((cards, stack) => {
+      // HACK corrects persistence treating enum as string instead of int
+      this.stackToCards.delete(stack)
+      const stackInt = parseInt(stack as any) as Stack
+      this.stackToCards.set(stackInt, cards)
+
+      // Build the reverse index (it's not persisted)
+      cards.forEach((card) => this.cardToStack.set(card.id, stackInt))
+    })
+    
 
     autorun(() => {
       const inDeck = new Set<String>()

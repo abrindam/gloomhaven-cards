@@ -5,7 +5,8 @@ import { Container } from '../Container';
 import { Stack } from '../Logic/PlayingManager';
 import { SectionView, SectionViewDelegate } from './SectionView';
 import { Card } from '../Logic/Card';
-import { Button, Controls } from './ChooseDeckView.styles';
+import { Controls } from './ChooseDeckView.styles';
+import { Button } from './CommonUI.styles';
 
 class ChooseDeckSectionViewDelegate implements SectionViewDelegate {
   private container: Container;
@@ -64,8 +65,6 @@ export class ChooseDeckView extends React.Component<Props> {
     
     const numSelectedColumns = Math.max(2, Math.ceil((numSelectedCards) / 3))
     const numUnselectedColumns = 8 - numSelectedColumns
-
-    console.log([numUnselectedColumns, numSelectedColumns])
 
     return (
       <div>
