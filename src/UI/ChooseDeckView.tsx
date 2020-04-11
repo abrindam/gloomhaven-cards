@@ -55,6 +55,7 @@ export class ChooseDeckView extends React.Component<Props> {
 
   constructor(props: Props) {
     super(props)
+    this.onClickChangeCharacter = this.onClickChangeCharacter.bind(this)
     this.onClickContinue = this.onClickContinue.bind(this)
   }
 
@@ -83,13 +84,23 @@ export class ChooseDeckView extends React.Component<Props> {
             />
           </div>
           <Controls>
-            <Button onClick={this.onClickContinue}>Continue</Button>
+          <Button onClick={this.onClickChangeCharacter}>Change Character</Button>
+          <Button onClick={this.onClickContinue}>Continue</Button>
           </Controls>
       </div>
     )
   }
 
-  onClickContinue() {
-    this.props.container.setupStateUIManager.chooseDeckDone()
+  onClickChangeCharacter() {
+    const confirmed = confirm("Changing character will reset the current game. Are you sure?")
+    if (confirmed) {
+      this.props.container.setupStateUIManager.changeCharacter()
+    }
   }
+
+  onClickContinue() {
+    this.props.container.setupStateUIManager.play()
+  }
+
+
 }

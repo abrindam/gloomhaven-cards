@@ -10,7 +10,11 @@ function removeFromArray<T>(array:T[], item: T) {
 }
 
 export enum Stack {
-  HAND, IN_PLAY, ACTIVE, DISCARD, LOST
+  HAND = "HAND", 
+  IN_PLAY = "IN_PLAY", 
+  ACTIVE = "ACTIVE", 
+  DISCARD = "DISCARD", 
+  LOST = "LOST"
 }
 
 export class PlayingManager {
@@ -34,13 +38,13 @@ export class PlayingManager {
 
     
     this.stackToCards.forEach((cards, stack) => {
-      // HACK corrects persistence treating enum as string instead of int
-      this.stackToCards.delete(stack)
-      const stackInt = parseInt(stack as any) as Stack
-      this.stackToCards.set(stackInt, cards)
+      // // HACK corrects persistence treating enum as string instead of int
+      // this.stackToCards.delete(stack)
+      // const stackInt = parseInt(stack as any) as Stack
+      // this.stackToCards.set(stackInt, cards)
 
       // Build the reverse index (it's not persisted)
-      cards.forEach((card) => this.cardToStack.set(card.id, stackInt))
+      cards.forEach((card) => this.cardToStack.set(card.id, stack))
     })
     
 

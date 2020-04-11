@@ -8,6 +8,7 @@ import DndBackend from 'react-dnd-html5-backend'
 import { PlayingView } from './PlayingView';
 import { ChooseDeckView } from './ChooseDeckView';
 import { SetupState } from '../Logic/SetupStateUIManager';
+import { ChooseCharacterView } from './ChooseCharacterView';
 
 interface Props {container: Container}
 
@@ -18,15 +19,22 @@ export class AppView extends React.Component<Props> {
         super(props)
     }
 
+    viewToShow() {
+      switch(this.props.container.setupStateUIManager.setupState) {
+        case SetupState.CHOOSE_CHARACTER:
+          return <ChooseCharacterView container={this.props.container} />
+        case SetupState.CHOOSE_DECK:
+          return <ChooseDeckView container={this.props.container} />
+        case SetupState.PLAYING:
+          return <PlayingView container={this.props.container} />
+      } 
+    }
+
     render() {
         return (
             <App>
               <DndProvider backend={DndBackend}>
-                { 
-                  this.props.container.setupStateUIManager.setupState == SetupState.CHOOSE_DECK ?
-                  <ChooseDeckView container={this.props.container} /> :
-                  <PlayingView container={this.props.container} />   
-                }
+                { this.viewToShow() }
               </DndProvider>
             </App>
         );

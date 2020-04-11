@@ -2,7 +2,13 @@ import { Card } from "./Card";
 import { computed, action, observable, autorun } from "mobx";
 import { setupPersistence } from "./Persistence";
 import { serializable, list, object, serialize } from "serializr"
+import { GloomhavenDataService } from "./GloomhavenDataService";
+import { CharacterManager } from "./CharacterManager";
 
+function removeFromArray<T>(array:T[], item: T) {
+  const index = array.indexOf(item)
+  index >= 0 && array.splice(index, 1)
+}
 
 export class DeckManager {
 
@@ -14,43 +20,30 @@ export class DeckManager {
   @observable
   selectedCards: Card[] = []
 
-  constructor() {
-    this.unselectedCards.push(new Card("angelic-ascension"))
-    this.unselectedCards.push(new Card("beacon-of-light"))
-    this.unselectedCards.push(new Card("bright-aegis"))
-    this.unselectedCards.push(new Card("brilliant-prayer"))
-    this.unselectedCards.push(new Card("burning-flash"))
-    this.unselectedCards.push(new Card("cautious-advance"))
-    this.unselectedCards.push(new Card("cleansing-force"))
-    this.unselectedCards.push(new Card("daybreak"))
-    this.unselectedCards.push(new Card("dazzling-charge"))
-    this.unselectedCards.push(new Card("defensive-stance"))
-    this.unselectedCards.push(new Card("divine-intervention"))
-    this.unselectedCards.push(new Card("empowering-command"))
-    this.unselectedCards.push(new Card("engulfing-radiance"))
-    this.unselectedCards.push(new Card("glorious-bolt"))
-    this.unselectedCards.push(new Card("hammer-blow"))
-    this.unselectedCards.push(new Card("holy-strike"))
-    this.unselectedCards.push(new Card("illuminate-the-target"))
-    this.unselectedCards.push(new Card("inspiring-sanctity"))
-    this.unselectedCards.push(new Card("lay-on-hands"))
-    this.unselectedCards.push(new Card("mobilizing-axiom"))
-    this.unselectedCards.push(new Card("path-of-glory"))
-    this.unselectedCards.push(new Card("practical-plans"))
-    this.unselectedCards.push(new Card("protective-blessing"))
-    this.unselectedCards.push(new Card("purifying-aura"))
-    this.unselectedCards.push(new Card("righteous-strength"))
-    this.unselectedCards.push(new Card("scales-of-justice"))
-    // this.unselectedCards.push(new Card("sk-back"))
-    this.unselectedCards.push(new Card("supportive-chant"))
-    this.unselectedCards.push(new Card("tactical-order"))
-    this.unselectedCards.push(new Card("unwavering-mandate"))
-    this.unselectedCards.push(new Card("weapon-of-purity"))
-
+  constructor(characterManager: CharacterManager) {
+    
     setupPersistence(this, "deck")
 
     this.unselectedCards = this.unselectedCards.filter((card) => {
       return !this.selectedCards.find((curCard) => card.id == curCard.id)
+    })
+
+    autorun(() => {
+      const eligible = new Set<String>()
+      characterManager.characterCards.forEach((card) => eligible.add(card.id))
+
+      const alreadyInStack = new Set<String>()
+      ;[this.unselectedCards, this.selectedCards].forEach((cards) => {
+        cards.forEach((card) => {
+          alreadyInStack.add(card.id) 
+          if (!eligible.has(card.id)) {
+            this.removeCard(card)
+          }
+        })
+      })      
+      
+      const toAdd = characterManager.characterCards.filter((card) => !alreadyInStack.has(card.id))
+      toAdd.forEach((card) => this.addCard(card, this.unselectedCards))
     })
   }
   
@@ -62,6 +55,18 @@ export class DeckManager {
   @action
   unselectCard(card: Card) {
     this.swapCard(card, this.selectedCards, this.unselectedCards)
+  }
+
+
+  @action
+  private addCard(card: Card, to: Card[]) {
+    to.push(card)
+  }
+
+  @action
+  private removeCard(cardToRemove: Card) {
+    removeFromArray(this.unselectedCards, cardToRemove)
+    removeFromArray(this.selectedCards, cardToRemove)
   }
 
   private swapCard(card: Card, from: Card[], to: Card[]) {

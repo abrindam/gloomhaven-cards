@@ -26,7 +26,7 @@ class CardView extends React.Component<Props> {
 
     return (
       <CardAspectContainer ref={this.props.dragRef} onClick={ this.onClick } overflowCorrection={this.props.overflowCorrection}>
-        <CardInnerContainer id={this.props.card.id} selected={this.props.selected} ></CardInnerContainer>
+        <CardInnerContainer card={this.props.card} selected={this.props.selected} ></CardInnerContainer>
         {this.props.card.markerLocation && <CardMarker location={this.props.card.markerLocation} onClick={ this.onMarkerClick } /> }
       </CardAspectContainer>
     )

@@ -2,6 +2,7 @@
 import styled from "styled-components"
 import { CardImages } from "./CardImages";
 import { aspectRatioVW } from "./CssUtils";
+import { Card } from "../Logic/Card";
 
 const cardAspectRatio = 3/2
 const paddingVW = 0.25
@@ -23,14 +24,14 @@ export const CardAspectContainer = styled.div<{overflowCorrection: number}>`
   }
 `;
 
-export const CardInnerContainer = styled.div<{id: string, selected: boolean}>`
+export const CardInnerContainer = styled.div<{card: Card, selected: boolean}>`
   position: absolute;
   top: 0px;
   left: 0px;
   bottom: 0px;
   right: 0px;
   border: ${ props => props.selected ? "3px solid red" : "1px solid black" };
-  background-image: url(${ props => CardImages[props.id as keyof typeof CardImages] });
+  background-image: url(${ props => CardImages.get(props.card) });
   background-size: cover
 `;
 
