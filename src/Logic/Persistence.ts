@@ -13,9 +13,9 @@ function handleUpgradeBadly() {
     const ok = confirm("Your saved data is incompatible with this version of the application. Press OK to clear saved data.")
     if (ok) {
       localStorage.clear()
-      localStorage.setItem("dataModelVersion", dataModelVersion + "")
     }
   }
+  localStorage.setItem("dataModelVersion", dataModelVersion + "")
   upgradeHandled = true
 }
 
