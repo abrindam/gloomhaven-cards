@@ -62,5 +62,15 @@ export const CardBorder = styled.div<{selected: boolean}>`
   left: 0;
   bottom: 0;
   right: 0;
-  border: ${ props => props.selected ? "3px solid red" : "0px" };
+  border: ${ props => props.selected ? "3px solid #4F4" : "0px" };
+`;
+
+export const Controls = styled.div`
+  width: ${ aspectRatioVW(100) };
+  margin-top: 10px;
+  text-align: right;
+
+  & button {
+    margin-left: 10px;
+  }
 `;

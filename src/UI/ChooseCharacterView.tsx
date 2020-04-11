@@ -2,12 +2,9 @@ import * as React from 'react';
 import { observer } from "mobx-react";
 import { Container } from '../Container';
 
-import { Stack } from '../Logic/PlayingManager';
-import { SectionView, SectionViewDelegate } from './SectionView';
 import { Card } from '../Logic/Card';
-import { Controls } from './ChooseDeckView.styles';
 import { Button } from './CommonUI.styles';
-import { CardAspectContainer, CardInnerContainer, CardList, CardBorder, Title } from './ChooseCharacterView.styles';
+import { CardAspectContainer, CardInnerContainer, CardList, CardBorder, Title, Controls } from './ChooseCharacterView.styles';
 
 interface Props {container: Container}
 

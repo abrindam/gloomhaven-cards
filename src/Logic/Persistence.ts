@@ -9,14 +9,14 @@ var upgradeHandled = false
 function handleUpgradeBadly() {
   if (upgradeHandled) return 
   const savedDataModelVersion =  parseInt(localStorage.getItem("dataModelVersion"))
-  if (savedDataModelVersion != dataModelVersion) {
+  if (savedDataModelVersion != dataModelVersion && localStorage.length > 0) {
     const ok = confirm("Your saved data is incompatible with this version of the application. Press OK to clear saved data.")
     if (ok) {
       localStorage.clear()
       localStorage.setItem("dataModelVersion", dataModelVersion + "")
     }
-    upgradeHandled = true
   }
+  upgradeHandled = true
 }
 
 export function setupPersistence<T>(targetObject: T, persistanceName: string): void {

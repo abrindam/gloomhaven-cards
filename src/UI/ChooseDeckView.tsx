@@ -5,48 +5,8 @@ import { Container } from '../Container';
 import { Stack } from '../Logic/PlayingManager';
 import { SectionView, SectionViewDelegate } from './SectionView';
 import { Card } from '../Logic/Card';
-import { Controls } from './ChooseDeckView.styles';
+import { Controls, CardList, Title, CardAspectContainer, CardInnerContainer, CardBorder, BottomBar, Status } from './ChooseDeckView.styles';
 import { Button } from './CommonUI.styles';
-
-class ChooseDeckSectionViewDelegate implements SectionViewDelegate {
-  private container: Container;
-  private selected: boolean;
-  
-  constructor(container: Container, selected: boolean) {
-    this.container = container
-    this.selected = selected
-  }
-
-  getCards(): Card[] {
-    if (this.selected) {
-      return this.container.deckManager.selectedCards
-    } else {
-      return this.container.deckManager.unselectedCards
-    }
-  }
-  canDropCard(card: Card): boolean {
-    if (this.selected) {
-      return this.container.deckManager.selectedCards.findIndex((curCard) => curCard.id == card.id) == -1
-    } else {
-      return this.container.deckManager.unselectedCards.findIndex((curCard) => curCard.id == card.id) == -1
-    }
-  }
-  onDropCard(card: Card): void {
-    if (this.selected) {
-      this.container.deckManager.selectCard(card)
-    } else {
-      this.container.deckManager.unselectCard(card)
-    }
-  }
-  isSelected(card: Card): boolean {
-    // let selectedId = this.container.selectedCardUIManager.selectedCard && this.container.selectedCardUIManager.selectedCard.id
-    // return selectedId == card.id
-    return false
-  }
-  onSelected(card: Card): void {
-    // this.container.selectedCardUIManager.selectCard(card)
-  }
-}
 
 interface Props {container: Container}
 
@@ -55,8 +15,13 @@ export class ChooseDeckView extends React.Component<Props> {
 
   constructor(props: Props) {
     super(props)
+    this.onClickCard = this.onClickCard.bind(this)
     this.onClickChangeCharacter = this.onClickChangeCharacter.bind(this)
     this.onClickContinue = this.onClickContinue.bind(this)
+  }
+
+  isCardSelected(card: Card) {
+    return !!this.props.container.deckManager.selectedCards.find(curCard => card.id == curCard.id)
   }
 
   render() {
@@ -68,9 +33,23 @@ export class ChooseDeckView extends React.Component<Props> {
     const numUnselectedColumns = 8 - numSelectedColumns
 
     return (
-      <div>
+      <CardList>
+          <Title>Choose Deck</Title>
           <div>
-            <SectionView
+          {
+              this.props.container.characterManager.characterCards.map(card => {
+                return <CardAspectContainer key={card.id}>
+                  <CardInnerContainer card = { card } />
+                  <CardBorder 
+                    selected={ this.isCardSelected(card)}
+                    onClick = { ()=> this.onClickCard(card) }
+                  />
+                </CardAspectContainer>
+              })
+            }            
+
+
+            {/* <SectionView
               name="Unselected" 
               delegate={new ChooseDeckSectionViewDelegate(this.props.container, false)}
               horizontalCards={numUnselectedColumns} 
@@ -81,14 +60,27 @@ export class ChooseDeckView extends React.Component<Props> {
               delegate={new ChooseDeckSectionViewDelegate(this.props.container, true)}
               horizontalCards={numSelectedColumns} 
               verticalCards={3}
-            />
+            /> */}
           </div>
-          <Controls>
-          <Button onClick={this.onClickChangeCharacter}>Change Character</Button>
-          <Button onClick={this.onClickContinue}>Continue</Button>
-          </Controls>
-      </div>
+          <BottomBar>
+            <Status>
+              Cards selected: {this.props.container.deckManager.selectedCards.length}
+            </Status>
+            <Controls>
+              <Button onClick={this.onClickChangeCharacter}>Change Character</Button>
+              <Button onClick={this.onClickContinue}>Continue</Button>
+            </Controls>
+          </BottomBar>
+      </CardList>
     )
+  }
+
+  onClickCard(card: Card) {
+    if (this.isCardSelected(card)) {
+      this.props.container.deckManager.unselectCard(card)
+    } else {
+      this.props.container.deckManager.selectCard(card)
+    }
   }
 
   onClickChangeCharacter() {
