@@ -14,7 +14,7 @@ export class AttackDeckView extends React.Component<Props> {
     super(props)
     
     this.onClickDraw = this.onClickDraw.bind(this)
-    this.onClickEndTurn = this.onClickEndTurn.bind(this)
+    this.onClickEndRound = this.onClickEndRound.bind(this)
     this.onClickBless = this.onClickBless.bind(this)
     this.onClickCurse = this.onClickCurse.bind(this)
   }
@@ -23,7 +23,7 @@ export class AttackDeckView extends React.Component<Props> {
 
     const drawnAttackModifiers = this.props.container.playingAttackDeckManager.drawnAttackModifiers
     const undrawnAttackModifiers = this.props.container.playingAttackDeckManager.undrawnAttackModifiers
-    const turnInProgress = this.props.container.playingAttackDeckManager.turnInProgress
+    const turnInProgress = this.props.container.playingAttackDeckManager.roundInProgress
 
     const drawnCardsToDisplay = drawnAttackModifiers.slice(0, 4).reverse();
 
@@ -52,15 +52,12 @@ export class AttackDeckView extends React.Component<Props> {
        
         
           <Controls>
-            {
-              turnInProgress ? (
-                <Button onClick={this.onClickEndTurn}>End Turn</Button>
-              ) : ( 
-                <React.Fragment>
-                  <Button onClick={this.onClickBless}>Bless ({numberOfBlesses})</Button>
-                  <Button onClick={this.onClickCurse}>Curse ({numberOfCurses})</Button>
-                </React.Fragment>
-              )
+            <Button onClick={this.onClickBless}>Bless ({numberOfBlesses})</Button>
+            <Button onClick={this.onClickCurse}>Curse ({numberOfCurses})</Button>
+            {  
+              turnInProgress && (
+                <Button onClick={this.onClickEndRound}>End Round</Button>
+              ) 
             }
             
           </Controls>
@@ -77,8 +74,8 @@ export class AttackDeckView extends React.Component<Props> {
     this.props.container.playingAttackDeckManager.drawNextAttackModifier()
   }
 
-  onClickEndTurn() {
-    this.props.container.playingAttackDeckManager.endTurn()
+  onClickEndRound() {
+    this.props.container.playingAttackDeckManager.endRound()
   }
 
   onClickBless() {

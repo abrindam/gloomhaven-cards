@@ -46,10 +46,10 @@ export class PlayingAttackDeckManager {
 
   @serializable
   @observable
-  turnInProgress: boolean = false
+  roundInProgress: boolean = false
 
   @serializable
-  private shuffleOnEndOfTurn: boolean = false
+  private shuffleOnEndOfRound: boolean = false
 
   @computed get blessesInDeck(): number {
     return this.undrawnAttackModifiers.filter(attackModifier => attackModifier.type == CharacterAttackModifierType.BLESS).length
@@ -97,14 +97,14 @@ export class PlayingAttackDeckManager {
     this.undrawnAttackModifiers = this.undrawnAttackModifiers.filter(attackModifier => {
       return attackModifier.type != CharacterAttackModifierType.BLESS && attackModifier.type != CharacterAttackModifierType.CURSE
     })
-    this.turnInProgress = false
-    this.shuffleOnEndOfTurn = false
+    this.roundInProgress = false
+    this.shuffleOnEndOfRound = false
   }
 
   @action
   drawNextAttackModifier() {
 
-    this.turnInProgress = true
+    this.roundInProgress = true
 
     if (!this.undrawnAttackModifiers.length) {
       this.recycleDeck()
@@ -121,23 +121,23 @@ export class PlayingAttackDeckManager {
     
     console.log(drawnAttackModifier.type)
     if (drawnAttackModifier.type == CharacterAttackModifierType.CRIT || drawnAttackModifier.type == CharacterAttackModifierType.MISS) {
-      this.shuffleOnEndOfTurn = true
+      this.shuffleOnEndOfRound = true
     }
 
   }
 
   @action 
-  endTurn() {
-    if (!this.turnInProgress) {
+  endRound() {
+    if (!this.roundInProgress) {
       return
     }
 
-    if (this.shuffleOnEndOfTurn) {
+    if (this.shuffleOnEndOfRound) {
       this.recycleDeck()
     }
 
-    this.shuffleOnEndOfTurn = false
-    this.turnInProgress = false
+    this.shuffleOnEndOfRound = false
+    this.roundInProgress = false
   }
 
   @action
