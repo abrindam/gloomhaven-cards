@@ -9,6 +9,7 @@ import { PlayingView } from './PlayingView';
 import { ChooseDeckView } from './ChooseDeckView';
 import { SetupState } from '../Logic/SetupStateUIManager';
 import { ChooseCharacterView } from './ChooseCharacterView';
+import { ChooseAttackDeckView } from './ChooseAttackDeckView';
 
 interface Props {container: Container}
 
@@ -25,6 +26,8 @@ export class AppView extends React.Component<Props> {
           return <ChooseCharacterView container={this.props.container} />
         case SetupState.CHOOSE_DECK:
           return <ChooseDeckView container={this.props.container} />
+          case SetupState.CHOOSE_ATTACK_DECK:
+            return <ChooseAttackDeckView container={this.props.container} />
         case SetupState.PLAYING:
           return <PlayingView container={this.props.container} />
       } 

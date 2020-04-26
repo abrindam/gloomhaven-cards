@@ -5,8 +5,8 @@ import { serializable, list, object, serialize } from "serializr"
 import { GloomhavenDataService } from "./GloomhavenDataService";
 import { CharacterManager } from "./CharacterManager";
 
-function removeFromArray<T>(array:T[], item: T) {
-  const index = array.indexOf(item)
+function removeFromArray(array:Card[], item: Card) {
+  const index = array.findIndex(curItem => curItem.id == item.id)
   index >= 0 && array.splice(index, 1)
 }
 

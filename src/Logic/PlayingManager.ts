@@ -4,8 +4,8 @@ import { DeckManager } from "./DeckManager"
 import { setupPersistence } from "./Persistence"
 import { serializable, map, object, list } from "serializr"
 
-function removeFromArray<T>(array:T[], item: T) {
-  const index = array.indexOf(item)
+function removeFromArray(array:Card[], item: Card) {
+  const index = array.findIndex(curItem => curItem.id == item.id)
   index >= 0 && array.splice(index, 1)
 }
 
@@ -75,6 +75,12 @@ export class PlayingManager {
     return this.cardToStack.get(card.id)
   }
 
+  @action
+  newGame() {
+    this.deckManager.selectedCards.forEach((card) => this.moveCard(card, Stack.HAND))
+  }
+
+  @action
   moveCard(cardToMove: Card, toStack: Stack) {
     const currentStack = this.cardToStack.get(cardToMove.id)
     if (currentStack === undefined) {

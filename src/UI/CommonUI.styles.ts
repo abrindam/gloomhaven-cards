@@ -11,7 +11,7 @@ export const Button = styled.button`
 	cursor:pointer;
 	color:#ffffff;
 	font-family:Arial;
-	font-size:15px;
+	font-size: ${ aspectRatioVW(1) };
 	padding:${ aspectRatioVH(0.8) } ${ aspectRatioVW(1.5) };
 	text-decoration:none;
 	text-shadow:0px 1px 0px #263666;

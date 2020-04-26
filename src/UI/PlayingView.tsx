@@ -7,6 +7,7 @@ import { Stack } from '../Logic/PlayingManager';
 import { SectionView, SectionViewDelegate } from './SectionView';
 import { Card } from '../Logic/Card';
 import { Button } from './CommonUI.styles';
+import { AttackDeckView } from './AttackDeckView';
 
 class PlayingViewSectionViewDelegate implements SectionViewDelegate {
   private container: Container;
@@ -44,6 +45,8 @@ export class PlayingView extends React.Component<Props> {
   constructor(props: Props) {
     super(props)
     this.onClickChangeDeck = this.onClickChangeDeck.bind(this)
+    this.onClickChangeAttackDeck = this.onClickChangeAttackDeck.bind(this)
+    this.onClickNewGame = this.onClickNewGame.bind(this)
   }
 
   render() {
@@ -88,9 +91,12 @@ export class PlayingView extends React.Component<Props> {
             verticalCards={1}
           >
             <NonCardSectionTitle>Attack Deck</NonCardSectionTitle>
+            <AttackDeckView container = {this.props.container} />
           </NonCardSection>
           <Controls>
             <Button onClick={this.onClickChangeDeck}>Change Deck</Button>
+            <Button onClick={this.onClickChangeAttackDeck}>Change Attack Deck</Button>
+            <Button onClick={this.onClickNewGame}>New Game</Button>
           </Controls>
           </VerticalGroup>
         </Row>
@@ -100,5 +106,17 @@ export class PlayingView extends React.Component<Props> {
 
   onClickChangeDeck() {
     this.props.container.setupStateUIManager.changeDeck()
+  }
+
+  onClickChangeAttackDeck() {
+    this.props.container.setupStateUIManager.changeAttackDeck()
+  }
+
+  onClickNewGame() {
+    const ok = confirm("Are you sure you want to start a new game?")
+    if (ok) {
+      this.props.container.playingManager.newGame()
+      this.props.container.playingAttackDeckManager.newGame()
+    }
   }
 }

@@ -19,7 +19,8 @@ export const NonCardSection = styled.div<{horizontalCards: number, verticalCards
   vertical-align: top;
   height: ${props => aspectRatioVH(props.verticalCards / 3.33 * 100 * fudgeFactor + sectionTitleHeightVH + sectionTitleVerticalMarginVH * 2)};
   width: ${props => aspectRatioVW(props.horizontalCards / 8 * 100 * fudgeFactor)};
-  background-color:  "white"
+  background-color:  "white";
+  position: relative
 `;
 
 export const NonCardSectionTitle = styled.div`
@@ -43,4 +44,8 @@ export const Controls = styled.div`
   text-align: center;
   padding: 10px;
 
+  & button {
+    display: block;
+    margin-bottom: 5px;
+  }
 `;

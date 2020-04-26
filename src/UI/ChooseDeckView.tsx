@@ -17,7 +17,8 @@ export class ChooseDeckView extends React.Component<Props> {
     super(props)
     this.onClickCard = this.onClickCard.bind(this)
     this.onClickChangeCharacter = this.onClickChangeCharacter.bind(this)
-    this.onClickContinue = this.onClickContinue.bind(this)
+    this.onClickChangeAttackDeck = this.onClickChangeAttackDeck.bind(this)
+    this.onClickPlay = this.onClickPlay.bind(this)
   }
 
   isCardSelected(card: Card) {
@@ -68,7 +69,8 @@ export class ChooseDeckView extends React.Component<Props> {
             </Status>
             <Controls>
               <Button onClick={this.onClickChangeCharacter}>Change Character</Button>
-              <Button onClick={this.onClickContinue}>Continue</Button>
+              <Button onClick={this.onClickChangeAttackDeck}>Change Attack Deck</Button>
+              <Button onClick={this.onClickPlay}>Play Game</Button>
             </Controls>
           </BottomBar>
       </CardList>
@@ -90,7 +92,11 @@ export class ChooseDeckView extends React.Component<Props> {
     }
   }
 
-  onClickContinue() {
+  onClickChangeAttackDeck() {
+    this.props.container.setupStateUIManager.changeAttackDeck()
+  }
+
+  onClickPlay() {
     this.props.container.setupStateUIManager.play()
   }
 
