@@ -44,9 +44,26 @@ export class PlayingView extends React.Component<Props> {
 
   constructor(props: Props) {
     super(props)
+    this.keyListener = this.keyListener.bind(this)
     this.onClickChangeDeck = this.onClickChangeDeck.bind(this)
     this.onClickChangeAttackDeck = this.onClickChangeAttackDeck.bind(this)
     this.onClickNewGame = this.onClickNewGame.bind(this)
+    this.onClickInPlayActionSwapOrder = this.onClickInPlayActionSwapOrder.bind(this)
+    this.onClickDiscardActionRandomCard = this.onClickDiscardActionRandomCard.bind(this)
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.keyListener)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.keyListener)
+  }
+
+  keyListener(event: KeyboardEvent) {
+    if (event.code === "ArrowLeft" || event.code === "KeyA") this.onKeyDownArrowLeft()
+    else if (event.code === "ArrowRight" || event.code === "KeyD") this.onKeyDownArrowRight()
+    else if (event.code === "Escape") this.onKeyDownEscape()
   }
 
   render() {
@@ -58,6 +75,8 @@ export class PlayingView extends React.Component<Props> {
             delegate={new PlayingViewSectionViewDelegate(this.props.container, Stack.IN_PLAY)}
             horizontalCards={2} 
             verticalCards={1}
+            actionButtonLabel="Swap Order"
+            onActionButtonClick={this.onClickInPlayActionSwapOrder}
           />
           <SectionView
             name="Active" 
@@ -70,6 +89,8 @@ export class PlayingView extends React.Component<Props> {
             delegate={new PlayingViewSectionViewDelegate(this.props.container, Stack.DISCARD)}
             horizontalCards={2} 
             verticalCards={1}
+            actionButtonLabel="Random Card"
+            onActionButtonClick={this.onClickDiscardActionRandomCard}
           />
           <SectionView
             name="Lost" 
@@ -119,4 +140,34 @@ export class PlayingView extends React.Component<Props> {
       this.props.container.playingAttackDeckManager.newGame()
     }
   }
+
+  onClickInPlayActionSwapOrder() {
+    console.log("swap")
+    this.props.container.playingManager.swapInPlayOrder()
+  }
+
+  onClickDiscardActionRandomCard() {
+    const selected = this.props.container.playingManager.randomDiscardCard()
+    this.props.container.selectedCardUIManager.selectCard(selected)
+  }
+
+  onKeyDownArrowLeft() {
+    const selectedCard = this.props.container.selectedCardUIManager.selectedCard
+    if (!selectedCard) return
+    const currentIndex = this.props.container.playingManager.getIndexInStackForCard(selectedCard)
+    this.props.container.playingManager.setIndexInStackForCard(selectedCard, Math.max(0, currentIndex - 1))
+  }
+
+  onKeyDownArrowRight() {
+    const selectedCard = this.props.container.selectedCardUIManager.selectedCard
+    if (!selectedCard) return
+    const currentIndex = this.props.container.playingManager.getIndexInStackForCard(selectedCard)
+    const maxIndex = this.props.container.playingManager.getStackLengthForCard(selectedCard) - 1
+    this.props.container.playingManager.setIndexInStackForCard(selectedCard, Math.min(maxIndex, currentIndex + 1))
+  }
+
+  onKeyDownEscape() {
+    this.props.container.selectedCardUIManager.selectCard(null)
+  }
+
 }

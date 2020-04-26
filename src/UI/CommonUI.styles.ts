@@ -24,3 +24,8 @@ export const Button = styled.button`
     top:1px;
   }
 `;
+
+export const MiniButton = styled(Button)`
+	font-size: ${ aspectRatioVW(0.65) };
+	padding:${ aspectRatioVH(0.5) } ${ aspectRatioVW(1) };
+`;

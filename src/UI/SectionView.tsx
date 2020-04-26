@@ -1,12 +1,13 @@
 import * as React from 'react';
 import { observer } from "mobx-react";
 
-import { SectionTitle, Section, CardRow } from './SectionView.styles';
+import { SectionTitle, Section, CardRow, ActionButtonContainer } from './SectionView.styles';
 import { CardView } from './CardView';
 import { Stack } from '../Logic/PlayingManager';
 import { DropTarget, DropTargetSpec, DragElementWrapper } from 'react-dnd';
 import { DragTypes } from './DragTypes';
 import { Card } from '../Logic/Card';
+import { MiniButton } from './CommonUI.styles';
 
 
 export interface SectionViewDelegate {
@@ -27,7 +28,9 @@ interface Props extends DropProps {
   name: string
   delegate: SectionViewDelegate
   horizontalCards: number, 
-  verticalCards: number
+  verticalCards: number,
+  actionButtonLabel?: string
+  onActionButtonClick?: () => void
 }
 
 @observer
@@ -35,6 +38,7 @@ class SectionView extends React.Component<Props> {
 
     constructor(props: Props) {
         super(props)
+        this.onClickActionButton = this.onClickActionButton.bind(this)
     }
 
     render() {
@@ -86,12 +90,21 @@ class SectionView extends React.Component<Props> {
               )
             })
           }
+          {this.props.actionButtonLabel && (
+            <ActionButtonContainer>
+              <MiniButton onClick={this.onClickActionButton}>{this.props.actionButtonLabel}</MiniButton>
+            </ActionButtonContainer>
+          )}
         </Section>
       )
     }
  
     private cardSelected(card: Card) {
       this.props.delegate.onSelected(card)
+    }
+
+    onClickActionButton() {
+      this.props.onActionButtonClick && this.props.onActionButtonClick()
     }
       
 };

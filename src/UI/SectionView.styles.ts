@@ -14,7 +14,8 @@ export const Section = styled.div<{horizontalCards: number, verticalCards: numbe
   vertical-align: top;
   height: ${props => aspectRatioVH(props.verticalCards / 3.33 * 100 * fudgeFactor + sectionTitleHeightVH + sectionTitleVerticalMarginVH * 2)};
   width: ${props => aspectRatioVW(props.horizontalCards / 8 * 100 * fudgeFactor)};
-  background-color: ${props => props.showValidDrop ? (props.showValidDropHover ? "#AFA" : "#DFF") : "white"}
+  background-color: ${props => props.showValidDrop ? (props.showValidDropHover ? "#AFA" : "#DFF") : "white"};
+  position: relative;
 `;
 
 export const SectionTitle = styled.div`
@@ -27,4 +28,13 @@ export const SectionTitle = styled.div`
 `;
 
 export const CardRow = styled.div`
+`;
+
+export const ActionButtonContainer = styled.div`
+  position: absolute;
+  top: ${aspectRatioVW(0.25)};
+  right: ${aspectRatioVW(0.25)};
+  width: ${aspectRatioVW(7)};
+  height: ${aspectRatioVH(1)};
+  text-align:right
 `;

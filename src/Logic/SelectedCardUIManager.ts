@@ -4,7 +4,7 @@ import { Card } from "./Card"
 export class SelectedCardUIManager {
 
   @observable
-  selectedCard: Card = null
+  selectedCard: Card | null = null
 
   @action
   selectCard(card: Card) {

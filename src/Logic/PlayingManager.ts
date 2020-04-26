@@ -75,6 +75,16 @@ export class PlayingManager {
     return this.cardToStack.get(card.id)
   }
 
+  getIndexInStackForCard(card: Card) : number {
+    const cardsInStack = this.getCardsForStack(this.getStackForCard(card))
+    return cardsInStack.findIndex(curCard => curCard.id === card.id)
+  }
+
+  getStackLengthForCard(card: Card) : number {
+    const cardsInStack = this.getCardsForStack(this.getStackForCard(card))
+    return cardsInStack.length
+  }
+
   @action
   newGame() {
     this.deckManager.selectedCards.forEach((card) => this.moveCard(card, Stack.HAND))
@@ -105,6 +115,25 @@ export class PlayingManager {
     const currentStack = this.cardToStack.get(cardToRemove.id)
     this.cardToStack.delete(cardToRemove.id)
     removeFromArray(this.stackToCards.get(currentStack), cardToRemove)
+  }
+
+  @action
+  setIndexInStackForCard(card: Card, index: number) : void {
+    const cardsInStack = this.getCardsForStack(this.getStackForCard(card))
+    removeFromArray(cardsInStack, card)
+    cardsInStack.splice(index, 0, card)
+  }
+
+  @action
+  swapInPlayOrder() : void {
+    const cardsInPlay = this.stackToCards.get(Stack.IN_PLAY)
+    this.stackToCards.set(Stack.IN_PLAY, cardsInPlay.slice().reverse())
+  }
+
+  randomDiscardCard() : Card {
+    const cardsInDiscard = this.stackToCards.get(Stack.DISCARD)
+    const randomIndex = Math.floor(Math.random() * cardsInDiscard.length);
+    return cardsInDiscard[randomIndex]
   }
 
 }
