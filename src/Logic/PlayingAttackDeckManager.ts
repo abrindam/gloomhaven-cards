@@ -169,6 +169,11 @@ export class PlayingAttackDeckManager {
         !this.undrawnAttackModifiers.find((curAttackModifier) => attackModifier.id == curAttackModifier.id)
     })
 
+    if (!toAdd) {
+      // Out of curses/blesses
+      return 
+    }
+
     this.undrawnAttackModifiers.push(toAdd)
     shuffle(this.undrawnAttackModifiers)
   }
