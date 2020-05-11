@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Container } from '../Container';
 import { AttackDeckViewContainer, AttackModifierAspectContainer, AttackModifierBackInnerContainer, AttackModifierInnerContainer, DrawnModifiers, UndrawnModifiers, NumberOfCardsAnnotation, Controls } from './AttackDeckView.styles';
 import { Button } from "./CommonUI.styles";
+import { Logger } from "../Infra/Logger";
 
 
 
@@ -72,17 +73,31 @@ export class AttackDeckView extends React.Component<Props> {
 
   onClickDraw() {
     this.props.container.playingAttackDeckManager.drawNextAttackModifier()
+    this.logAttackDeckState()
   }
 
   onClickEndRound() {
     this.props.container.playingAttackDeckManager.endRound()
+    this.logAttackDeckState()
   }
 
   onClickBless() {
     this.props.container.playingAttackDeckManager.bless()
+    Logger.log("Blessed attack deck")
+    this.logAttackDeckState()
   }
 
   onClickCurse() {
     this.props.container.playingAttackDeckManager.curse()
+    Logger.log("Cursed attack deck")
+    this.logAttackDeckState()
+  }
+
+  private logAttackDeckState() {
+    const drawnAttackModifiers = this.props.container.playingAttackDeckManager.drawnAttackModifiers
+    const undrawnAttackModifiers = this.props.container.playingAttackDeckManager.undrawnAttackModifiers
+
+    Logger.log(`Drawn attack modifiers: ${drawnAttackModifiers.map(attackModifier => attackModifier.id)}`)
+    Logger.secret("Undrawn attack modifiers", `${undrawnAttackModifiers.map(attackModifier => attackModifier.id)}`)
   }
 }

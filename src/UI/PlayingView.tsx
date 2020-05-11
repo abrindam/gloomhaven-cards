@@ -8,6 +8,7 @@ import { SectionView, SectionViewDelegate } from './SectionView';
 import { Card } from '../Logic/Card';
 import { Button } from './CommonUI.styles';
 import { AttackDeckView } from './AttackDeckView';
+import { Logger } from '../Infra/Logger';
 
 class PlayingViewSectionViewDelegate implements SectionViewDelegate {
   private container: Container;
@@ -27,6 +28,7 @@ class PlayingViewSectionViewDelegate implements SectionViewDelegate {
   }
   onDropCard(card: Card): void {
     this.container.playingManager.moveCard(card, this.stack)
+    Logger.log(`Dragged card ${card.id} to stack ${this.stack}`)
   }
   isSelected(card: Card): boolean {
     let selectedId = this.container.selectedCardUIManager.selectedCard && this.container.selectedCardUIManager.selectedCard.id
@@ -138,17 +140,19 @@ export class PlayingView extends React.Component<Props> {
     if (ok) {
       this.props.container.playingManager.newGame()
       this.props.container.playingAttackDeckManager.newGame()
+      Logger.log("New game")
     }
   }
 
   onClickInPlayActionSwapOrder() {
-    console.log("swap")
     this.props.container.playingManager.swapInPlayOrder()
+    Logger.log("Swap in play order")
   }
 
   onClickDiscardActionRandomCard() {
     const selected = this.props.container.playingManager.randomDiscardCard()
     this.props.container.selectedCardUIManager.selectCard(selected)
+    Logger.log(`Selected random card ${selected.id}`)
   }
 
   onKeyDownArrowLeft() {

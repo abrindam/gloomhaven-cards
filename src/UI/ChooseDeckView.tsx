@@ -7,6 +7,7 @@ import { SectionView, SectionViewDelegate } from './SectionView';
 import { Card } from '../Logic/Card';
 import { Controls, CardList, Title, CardAspectContainer, CardInnerContainer, CardBorder, BottomBar, Status } from './ChooseDeckView.styles';
 import { Button } from './CommonUI.styles';
+import { Logger } from '../Infra/Logger';
 
 interface Props {container: Container}
 
@@ -80,8 +81,10 @@ export class ChooseDeckView extends React.Component<Props> {
   onClickCard(card: Card) {
     if (this.isCardSelected(card)) {
       this.props.container.deckManager.unselectCard(card)
+      Logger.log(`Removed card ${card.id} from deck`)
     } else {
       this.props.container.deckManager.selectCard(card)
+      Logger.log(`Added card ${card.id} to deck`)
     }
   }
 

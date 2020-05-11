@@ -3,6 +3,7 @@ import { Card } from "./Card"
 import { DeckManager } from "./DeckManager"
 import { setupPersistence } from "../Infra/Persistence"
 import { serializable, map, object, list } from "serializr"
+import { Logger } from "../Infra/Logger"
 
 function removeFromArray(array:Card[], item: Card) {
   const index = array.findIndex(curItem => curItem.id == item.id)
@@ -94,7 +95,7 @@ export class PlayingManager {
   moveCard(cardToMove: Card, toStack: Stack) {
     const currentStack = this.cardToStack.get(cardToMove.id)
     if (currentStack === undefined) {
-      console.log("ERROR: Cannot move card not already in the deck")
+      Logger.error("Cannot move card not already in the deck")
       return  
     }
     return this.moveOrAddCard(cardToMove, toStack)

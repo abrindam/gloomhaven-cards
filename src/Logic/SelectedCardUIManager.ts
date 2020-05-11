@@ -1,5 +1,6 @@
 import { observable, action } from "mobx"
 import { Card } from "./Card"
+import { Logger } from "../Infra/Logger"
 
 export class SelectedCardUIManager {
 
@@ -9,5 +10,6 @@ export class SelectedCardUIManager {
   @action
   selectCard(card: Card) {
     this.selectedCard = card
+    Logger.log(`Selected card ${card.id}`)
   }
 }

@@ -5,6 +5,7 @@ import { Container } from '../Container';
 import { Card } from '../Logic/Card';
 import { Button } from './CommonUI.styles';
 import { CardAspectContainer, CardInnerContainer, CardList, CardBorder, Title, Controls } from './ChooseCharacterView.styles';
+import { Logger } from '../Infra/Logger';
 
 interface Props {container: Container}
 
@@ -52,6 +53,7 @@ export class ChooseCharacterView extends React.Component<Props> {
 
   onClickCard(card: Card) {
     this.props.container.characterManager.character = card.character
+    Logger.log(`Chose character ${card.character.abbrev}`)
   }
 
   onClickContinue() {

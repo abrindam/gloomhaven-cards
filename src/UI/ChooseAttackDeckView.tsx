@@ -6,6 +6,7 @@ import { Controls, Title, BottomBar, Status, AttackModifierList, AttackModifierA
 import { Button } from './CommonUI.styles';
 import { AttackModifier } from '../Logic/AttackModifier';
 import { CharacterAttackModifierType } from '../Logic/GloomhavenDataService';
+import { Logger } from '../Infra/Logger';
 
 interface Props {container: Container}
 
@@ -89,8 +90,10 @@ export class ChooseAttackDeckView extends React.Component<Props> {
   onClickAttackModifier(attackModifier: AttackModifier) {
     if (this.isAttackModifierSelected(attackModifier)) {
       this.props.container.attackDeckManager.unselectAttackModifier(attackModifier)
+      Logger.log(`Removed attack modifier ${attackModifier.id} from deck`)
     } else {
       this.props.container.attackDeckManager.selectAttackModifier(attackModifier)
+      Logger.log(`Removed attack modifier ${attackModifier.id} from deck`)
     }
   }
 

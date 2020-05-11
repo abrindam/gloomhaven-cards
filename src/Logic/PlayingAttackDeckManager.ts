@@ -7,6 +7,7 @@ import { AttackDeckManager } from "./AttackDeckManager"
 import { AttackModifier } from "./AttackModifier"
 import { CharacterAttackModifierType } from "./GloomhavenDataService"
 import { CharacterManager } from "./CharacterManager"
+import { Logger } from "../Infra/Logger"
 
 function removeFromArray(array:AttackModifier[], item: AttackModifier) {
   const index = array.findIndex(curItem => curItem.id == item.id)
@@ -119,9 +120,11 @@ export class PlayingAttackDeckManager {
     this.removeAttackModifier(drawnAttackModifier)
     this.drawnAttackModifiers.unshift(drawnAttackModifier)
     
-    console.log(drawnAttackModifier.type)
+    Logger.log(`Drew attack modifier: ${drawnAttackModifier.id}`)
+    
     if (drawnAttackModifier.type == CharacterAttackModifierType.CRIT || drawnAttackModifier.type == CharacterAttackModifierType.MISS) {
       this.shuffleOnEndOfRound = true
+      Logger.log("Will shuffled at end of round")
     }
 
   }
@@ -132,8 +135,11 @@ export class PlayingAttackDeckManager {
       return
     }
 
+    Logger.log("End of round")
+    
     if (this.shuffleOnEndOfRound) {
       this.recycleDeck()
+      Logger.log("Shuffled deck")
     }
 
     this.shuffleOnEndOfRound = false
