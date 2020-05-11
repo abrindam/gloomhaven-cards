@@ -1,6 +1,7 @@
 import { observable } from "mobx"
 import { serializable, object, primitive, custom } from "serializr"
 import { CharacterAbilityCard, Character } from "./GloomhavenDataService"
+import { literal } from "../Infra/Persistence"
 
 export class Card {
 
@@ -10,10 +11,10 @@ export class Card {
   @serializable
   readonly imageBasename: string
 
-  @serializable(custom((val) => val, (val) => val))
+  @serializable(literal())
   readonly character: Character
   
-  @serializable(custom((val) => val, (val) => val))
+  @serializable(literal())
   @observable
   markerLocation: [number, number]
   

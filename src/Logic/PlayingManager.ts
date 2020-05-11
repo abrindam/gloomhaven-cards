@@ -1,7 +1,7 @@
 import { observable, action, autorun, reaction } from "mobx"
 import { Card } from "./Card"
 import { DeckManager } from "./DeckManager"
-import { setupPersistence } from "./Persistence"
+import { setupPersistence } from "../Infra/Persistence"
 import { serializable, map, object, list } from "serializr"
 
 function removeFromArray(array:Card[], item: Card) {

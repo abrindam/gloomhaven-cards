@@ -2,14 +2,14 @@ import { observable, computed } from "mobx";
 import { Character, GloomhavenDataService } from "./GloomhavenDataService";
 import { Card } from "./Card";
 import { object, serializable, custom } from "serializr";
-import { setupPersistence } from "./Persistence";
+import { setupPersistence, literal } from "../Infra/Persistence";
 import { AttackModifier } from "./AttackModifier";
 
 export class CharacterManager {
 
   private gloomhavenDataService: GloomhavenDataService;
 
-  @serializable(custom((val) => val, (val) => val))
+  @serializable(literal())
   @observable
   character: Character
 

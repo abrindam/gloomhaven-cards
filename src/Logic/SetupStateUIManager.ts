@@ -1,5 +1,5 @@
 import { observable, action } from "mobx"
-import { setupPersistence } from "./Persistence"
+import { setupPersistence } from "../Infra/Persistence"
 import { serializable } from "serializr"
 
 export enum SetupState {

@@ -1,6 +1,6 @@
 import { Card } from "./Card";
 import { computed, action, observable, autorun } from "mobx";
-import { setupPersistence } from "./Persistence";
+import { setupPersistence } from "../Infra/Persistence";
 import { serializable, list, object, serialize } from "serializr"
 import { GloomhavenDataService } from "./GloomhavenDataService";
 import { CharacterManager } from "./CharacterManager";

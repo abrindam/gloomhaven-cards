@@ -1,6 +1,7 @@
 import { autorun } from "mobx";
-import { serialize, deserialize } from "serializr";
+import { serialize, deserialize, custom } from "serializr";
 import { update } from "serializr";
+import { Logger } from "./Logger";
 
 const dataModelVersion = 1
 
@@ -13,6 +14,7 @@ function handleUpgradeBadly() {
     const ok = confirm("Your saved data is incompatible with this version of the application. Press OK to clear saved data.")
     if (ok) {
       localStorage.clear()
+      Logger.log("Cleared persistence store due to data incompatibility")
     }
   }
   localStorage.setItem("dataModelVersion", dataModelVersion + "")
@@ -33,3 +35,5 @@ export function setupPersistence<T>(targetObject: T, persistanceName: string): v
   })
 
 }
+
+export function literal() { return custom((val) => val, (val) => val)  }
