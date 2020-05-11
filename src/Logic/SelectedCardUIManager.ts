@@ -10,6 +10,10 @@ export class SelectedCardUIManager {
   @action
   selectCard(card: Card) {
     this.selectedCard = card
-    Logger.log(`Selected card ${card.id}`)
+    if (card) {
+      Logger.log(`Selected card ${card.id}`)
+    } else {
+      Logger.log("Unselected card")
+    }
   }
 }
