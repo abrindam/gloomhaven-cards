@@ -13,7 +13,7 @@ export class Card {
   @serializable(custom((val) => val, (val) => val))
   readonly character: Character
   
-  @serializable
+  @serializable(custom((val) => val, (val) => val))
   @observable
   markerLocation: [number, number]
   
