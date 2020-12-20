@@ -53,7 +53,12 @@ export class GloomhavenDataService {
   attackModifierAdditionals: RawAttackModifierAdditionalMap
 
   constructor() {
-    this.characterAbilityCards = require("json-loader!gloomhaven/data/character-ability-cards.js")
+    const baseCharacterAbilityCards = require("json-loader!gloomhaven/data/character-ability-cards.js")
+    const jotlCharacterAbilityCards = require("json-loader!jotl/data/character-ability-cards.js").filter((rawCard: any) => {
+      return !rawCard.name.includes("-halt-") && !rawCard.name.includes("-player-reference-") && !rawCard.name.startsWith("a-") && !rawCard.name.startsWith("b-")
+    })
+    this.characterAbilityCards = baseCharacterAbilityCards.concat(jotlCharacterAbilityCards)
+      .concat()
     this.attackModifiers = require("json-loader!gloomhaven/data/attack-modifiers.js")
     this.attackModifierAdditionals = require("../Data/attack-modifiers-additional.json")
   }

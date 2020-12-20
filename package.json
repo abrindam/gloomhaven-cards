@@ -32,6 +32,7 @@
   "dependencies": {
     "@types/node": "^9.4.6",
     "gloomhaven": "git+https://github.com/any2cards/gloomhaven.git",
+    "jotl": "git+https://github.com/any2cards/jotl.git",
     "mobx": "^5.15.4",
     "mobx-react": "^6.1.8",
     "react": "^16.13.1",
