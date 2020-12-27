@@ -59,7 +59,14 @@ export class GloomhavenDataService {
     })
     this.characterAbilityCards = baseCharacterAbilityCards.concat(jotlCharacterAbilityCards)
       .concat()
-    this.attackModifiers = require("json-loader!gloomhaven/data/attack-modifiers.js")
+
+    const baseAttackModifiers = require("json-loader!gloomhaven/data/attack-modifiers.js")
+    const jotlAttackModifiers = require("json-loader!jotl/data/attack-modifiers.js").filter((rawCard: any) => {
+      return !rawCard.image.includes(`/base/player`) &&  // exclude duplicative base player cards, only want the per-character ones
+        !rawCard.image.endsWith("-back.png") // per-character backs are included, unlike main game
+    })
+    this.attackModifiers = baseAttackModifiers.concat(jotlAttackModifiers)
+
     this.attackModifierAdditionals = require("../Data/attack-modifiers-additional.json")
   }
 
