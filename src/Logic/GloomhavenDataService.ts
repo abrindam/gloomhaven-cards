@@ -95,13 +95,13 @@ export class GloomhavenDataService {
 
   cardsForCharacter(character: Character) : CharacterAbilityCard[] {
     return this._cardsForCharacter(character)
-      .filter((card: any) => !card.image.endsWith("-back.png"))
+      .filter((card) => card.id != character.abbrev.toLowerCase() + "-back")
   }
 
   backCardForCharacter(character: Character) : CharacterAbilityCard {
   
     return this._cardsForCharacter(character)
-      .filter((card: any) => card.image.endsWith("-back.png"))
+      .filter((card) => card.id == character.abbrev.toLowerCase() + "-back")
       [0]
   }
 
